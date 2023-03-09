@@ -1,0 +1,6 @@
+#!/bin/bash
+0 string SCHOOL School data
+!:mime School
+file -C -m school.mgc
+echo "school" > file_school10
+echo "school" > file_school11
