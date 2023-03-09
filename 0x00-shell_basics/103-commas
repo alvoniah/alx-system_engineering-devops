@@ -1,2 +1,3 @@
-#!/bin/bash
-ls -1A --group-directories-first | sed -e 's/\(.*\)/\1\//' | tr '\n' ',' | tr -d '\n'; echo
+#!/bin/bash 
+ls -1A --group-directories-first | sed -e 's/\(.*\)/\1\//' | tr '\n' ',' | tr -d '\n'
+echo
