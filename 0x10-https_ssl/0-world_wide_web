@@ -1,25 +1,19 @@
 #!/usr/bin/env bash
-# my subdomains information
-# www --> 35.241.18.84
-# 1b-01 --> 54.175.74.59
-# web-01 --> 52.204.114.88
-# web-02 --> 100.25.111.104
-display_info () {
-    domain="$1"
-    subdomain="$2"
+# Usage: ./1-world_wide_web <domain> <subdomain>
+# Display information about subdomains.
 
-    # Use +short to get concise output, and loop through all lines in the ANSWER SECTION
-    while read -r line; do
-        # Extract the record type, destination, and print the information
-        record_type=$(echo "$line" | awk '{print $4}')
-        destination=$(echo "$line" | awk '{print $5}')
-        printf "The subdomain %s is a %s record and points to %s\n" "$subdomain" "$record_type" "$destination"
-    done < <(dig +short "$subdomain.$domain")
+domain_information () {
+    line=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
+    echo "$2 $line" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
 }
 
-# Loop through subdomains and display information
-for subdomain in "www" "lb-01" "web-01" "web-02"; do
-    if [ -z "$2" ] || [ "$2" == "$subdomain" ]; then
-        display_info "$1" "$subdomain"
-    fi
-done
+if [ "$#" == 1 ]
+then
+  domain_information "$1" "www"
+  domain_information "$1" "lb-01"
+  domain_information "$1" "web-01"
+  domain_information "$1" "web-02"
+elif [ "$#" == 2 ]
+then
+  domain_information "$1" "$2"
+fi
