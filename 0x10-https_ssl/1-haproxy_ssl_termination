@@ -15,7 +15,7 @@ backend app-servers
 #--alvoniah.tech params----begining
 frontend  alvoniah.tech-https-frontend
         bind *:80
-        bind *:443 ssl crt /etc/ssl/certs/alvoniah.pem
+        bind *:443 ssl crt /etc/ssl/xip.io/xip.io.pem
         mode http
         default_backend alvoniah.tech-backend
 
