@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # my subdomains information
-# www --> 18.235.243.108
+# www --> 35.241.18.84
 # web-01 --> 52.204.114.88
 # web-02 --> 100.25.111.104
 display_info ()
