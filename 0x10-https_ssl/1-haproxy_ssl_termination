@@ -1,0 +1,27 @@
+defaults
+    log     global
+    mode    http
+    option  httplog
+
+frontend web-servers
+    bind *:80
+    default_backend app-servers
+
+backend app-servers
+    balance roundrobin
+    server 328109-web-01 52.204.114.88 check
+    server 328109-web-02 100.25.111.104 check
+
+#--alvoniah.tech params----begining
+frontend  alvoniah.tech-https-frontend
+        bind *:80
+        bind *:443 ssl crt /etc/ssl/certs/alvoniah.pem
+        mode http
+        default_backend alvoniah.tech-backend
+
+
+backend alvoniah.tech-backend
+        balance roundrobin
+        server 328109-web-01 52.204.114.88 check
+        server 328109-web-02 100.25.111.104 check
+# end of parameters
