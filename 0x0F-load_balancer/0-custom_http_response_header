@@ -1,31 +1,28 @@
 #!/usr/bin/env bash
-# Script installs Nginx on a server
+# config web-01 to have an HTTP response header
 
-sudo apt update
-sudo apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-# sudo mkdir -p /var/www/html
-# sudo chown -R "$USER":"$USER" /var/www/html
-echo "Hello World!" | sudo tee  /var/www/html/index.html
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/error404.html
-echo "
-server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        add_header X-Served-By $HOSTNAME;
- 
-        root /var/www/html;
-        index index.html index.htm index.nginx-debian.html;
- 
-        error_page 404 /error404.html;
-        location = /error404.html {
-                root /var/www/html;
-                internal;
-        }
- 
-        location /redirect_me {
-                return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-        }
- 
-}" | sudo tee  /etc/nginx/sites-available/default
+# updating packages
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# creating an index page
+echo "Hello World!" | sudo tee /var/www/index.html
+
+# performing a redirection
+new_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/alvoniah permanent;"
+
+sudo sed -i "s/server_name _;/$new_string/" /etc/nginx/sites-enabled/default
+
+# creating a custom error page
+
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+
+# custom HTTP response header
+
+sudo sed -i "server_name _;/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
+
+# Test for syntax error
+sudo nginx -t
+
+# Restart
 sudo service nginx restart
